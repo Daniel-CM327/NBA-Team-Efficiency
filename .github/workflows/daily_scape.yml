@@ -27,13 +27,12 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run scraping script
-        run: python NBA_Team_Efficiency.py
+        run: python NBA_Team_Efficiency.py # Note: This uses your new script name!
 
-   # In the 'Commit and push changes' step of your YAML file
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add nba_team_efficiency.csv  # <--- UPDATED FILENAME HERE
+          git add nba_team_efficiency.csv  # Files should now match: Python script saves this, Git adds this.
           git commit -m "Daily Team Efficiency Update" || echo "No changes to commit"
           git push
