@@ -1,4 +1,4 @@
-name: Daily NBA Scrape
+name: Daily NBA Efficiency Scrape
 
 on:
   schedule:
