@@ -27,7 +27,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run scraping script
-        run: python Efficiency.py
+        run: python NBA_Team_Efficiency.py
 
       - name: Commit and push changes
         run: |
