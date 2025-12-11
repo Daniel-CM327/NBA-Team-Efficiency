@@ -370,7 +370,7 @@ def process_data(years: Sequence[str]) -> None:
 
     log("creating CSV file")
 
-    output = "NBA_Team_Efficiency.csv"
+    output = "nba_team_efficiency.csv"
     
     # Save the final data as a CSV file (This is the key change!)
     final_df.to_csv(output, index=False)
