@@ -27,7 +27,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run scraping script
-        run: python NBA_Team_Efficiency.py # Note: This uses your new script name!
+        run: python nba_team_efficiency.py # Note: This uses your new script name!
 
       - name: Commit and push changes
         run: |
