@@ -7,7 +7,7 @@ import os
 # --- Configuration ---
 URL = "https://www.espn.com/nba/hollinger/teamstats"
 # 🌟 REQUIRED FILENAME: Use the specified CSV name
-OUTPUT_FILENAME = "nba_team_efficiency_with_pace.csv" # Changed filename to reflect new column
+OUTPUT_FILENAME = "nba_team_efficiency.csv" # Changed filename to reflect new column
 
 # Column indices confirmed to pull Pace, Offensive, and Defensive Efficiency
 TEAM_COL_INDEX = 1
