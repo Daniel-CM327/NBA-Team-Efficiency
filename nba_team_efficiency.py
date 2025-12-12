@@ -7,11 +7,12 @@ import os
 # --- Configuration ---
 URL = "https://www.espn.com/nba/hollinger/teamstats"
 # 🌟 REQUIRED FILENAME: Use the specified CSV name
-OUTPUT_FILENAME = "nba_team_efficiency.csv" 
+OUTPUT_FILENAME = "nba_team_efficiency_with_pace.csv" # Changed filename to reflect new column
 
-# Column indices confirmed to pull Offensive and Defensive Efficiency (Hollinger Ratings)
+# Column indices confirmed to pull Pace, Offensive, and Defensive Efficiency
 TEAM_COL_INDEX = 1
-OFF_EFF_COL_INDEX = 10 
+PACE_COL_INDEX = 2        # <--- NEW INDEX ADDED
+OFF_EFF_COL_INDEX = 10
 DEF_EFF_COL_INDEX = 11
 
 # Add a realistic User-Agent header to avoid 403 error
@@ -36,8 +37,12 @@ try:
 
     # 4. Identify the main stats table
     main_df = None
+    # We need at least the highest index + 1 (11 + 1 = 12 columns)
+    MIN_COLS_REQUIRED = DEF_EFF_COL_INDEX + 1 
+    
     for table in tables:
-        if len(table) >= 30 and table.shape[1] > DEF_EFF_COL_INDEX:
+        # Check for sufficient rows (30 teams + header/footer) and columns
+        if len(table) >= 30 and table.shape[1] >= MIN_COLS_REQUIRED:
             main_df = table
             break
             
@@ -46,18 +51,23 @@ try:
         exit()
         
     # 5. Clean and select relevant columns
+    # Remove header rows containing 'Rk' or 'RK'
     main_df = main_df[~main_df.iloc[:, 0].astype(str).str.contains('Rk|RK', case=False, na=False)]
 
-    stats_df = main_df.iloc[:, [TEAM_COL_INDEX, OFF_EFF_COL_INDEX, DEF_EFF_COL_INDEX]].copy()
+    # --- UPDATED COLUMN SELECTION LIST ---
+    COLUMNS_TO_SELECT = [TEAM_COL_INDEX, PACE_COL_INDEX, OFF_EFF_COL_INDEX, DEF_EFF_COL_INDEX]
+    stats_df = main_df.iloc[:, COLUMNS_TO_SELECT].copy()
     
-    stats_df.columns = ['TEAM_NAME', 'OFF_EFF_ORtg', 'DEF_EFF_DRtg']
+    # --- UPDATED COLUMN NAMES ---
+    stats_df.columns = ['TEAM_NAME', 'PACE', 'OFF_EFF_ORtg', 'DEF_EFF_DRtg']
     stats_df = stats_df.dropna(subset=['TEAM_NAME'])
     
-    # --- 6. SAVE TO CSV with required filename ---
+    # 6. SAVE TO CSV with required filename
     stats_df.to_csv(OUTPUT_FILENAME, index=False)
     
     # 7. Confirmation Message
     print("\n## ✅ Success: Data Scraped and Saved")
+    print(f"Columns included: {list(stats_df.columns)}")
     print(f"File created: {os.path.abspath(OUTPUT_FILENAME)}")
     
 except requests.exceptions.RequestException as e:
